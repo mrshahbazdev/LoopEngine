@@ -1,58 +1,217 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# LoopEngine
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Turn Thinking Into Systems** - A process decision loop platform that helps you build reusable thinking processes your entire team can follow, with automatic decisions, self-checking feedback loops (Regelkreislauf), and full audit trails.
 
-## About Laravel
+## What It Does
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+You build a thinking process once - your whole team can apply it correctly, every time.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1. **You create a decision loop** - Define questions, possible answers, and what happens next
+2. **Save it as a template** - Reusable by the entire team
+3. **Employee starts the process** - Simple step-by-step questions
+4. **System decides automatically** - Based on answers: next step, new process, repeat, or end
+5. **Self-checking loops** - If something fails, the process goes back, re-evaluates, and improves
+6. **Everything is logged** - Who, when, what answers, how many loops - fully traceable
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Features
 
-## Learning Laravel
+- **Process Builder** - Create/edit decision workflows with steps, options, and transition logic
+- **Execution Engine** - Step-by-step employee interface with automatic navigation
+- **Self-Checking Loops (Regelkreislauf)** - Automatic feedback loops: check -> improve -> recheck -> repeat
+- **Full Audit Trail** - Complete logging of every action, answer, and loop iteration
+- **Analytics Dashboard** - Completion rates, loop averages, team performance
+- **User Roles** - Admin, Team Lead, Employee with role-based access
+- **EN/DE Language Support** - Full internationalization with language switcher
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Tech Stack
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+| Component | Technology |
+|-----------|-----------|
+| Backend | Laravel 13, PHP 8.3 |
+| Frontend | Livewire 4, Alpine.js, Tailwind CSS 4 |
+| Database | SQLite (dev) / PostgreSQL (prod) |
+| Build | Vite 8 |
+| Auth | Laravel built-in auth |
+| i18n | Laravel Localization (EN/DE) |
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## Quick Start
 
-## Agentic Development
+### Prerequisites
+- PHP 8.3+
+- Composer
+- Node.js 20+
+- SQLite
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### Setup
 
 ```bash
-composer require laravel/boost --dev
+# Clone the repo
+git clone https://github.com/mrshahbazdev/LoopEngine.git
+cd LoopEngine
 
-php artisan boost:install
+# Install PHP dependencies
+composer install
+
+# Install Node dependencies
+npm install
+
+# Configure environment
+cp .env.example .env
+php artisan key:generate
+
+# Set up SQLite database
+touch database/database.sqlite
+
+# Update .env for SQLite
+# DB_CONNECTION=sqlite
+# DB_DATABASE=/full/path/to/database/database.sqlite
+
+# Run migrations
+php artisan migrate
+
+# Seed demo data (optional)
+php artisan db:seed
+
+# Build assets
+npm run build
+
+# Start the server
+php artisan serve
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Visit `http://localhost:8000`
 
-## Contributing
+### Demo Accounts
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+After running `php artisan db:seed`:
 
-## Code of Conduct
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@loopengine.test | password |
+| Team Lead | lead@loopengine.test | password |
+| Employee | employee@loopengine.test | password |
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Project Structure
 
-## Security Vulnerabilities
+```
+LoopEngine/
+├── app/
+│   ├── Http/
+│   │   ├── Controllers/
+│   │   │   ├── AdminController.php      # Analytics, audit log, user management
+│   │   │   ├── AuthController.php       # Login, register, logout
+│   │   │   ├── DashboardController.php  # Main dashboard
+│   │   │   ├── LocaleController.php     # EN/DE language switcher
+│   │   │   ├── ProcessController.php    # Process builder CRUD + steps/options/transitions
+│   │   │   └── RunController.php        # Process execution engine
+│   │   └── Middleware/
+│   │       ├── CheckRole.php            # Role-based access control
+│   │       └── SetLocale.php            # Language detection
+│   ├── Models/
+│   │   ├── Process.php                  # Process templates
+│   │   ├── ProcessStep.php              # Steps with questions (EN/DE)
+│   │   ├── StepOption.php               # Answer choices with colors
+│   │   ├── StepTransition.php           # Decision logic (next/goto/loop_back/end)
+│   │   ├── ProcessRun.php               # Execution instances
+│   │   ├── RunResponse.php              # Answers with loop iteration tracking
+│   │   ├── RunLog.php                   # Full audit trail
+│   │   └── User.php                     # Users with roles
+│   └── Services/
+│       └── ProcessEngine.php            # Core execution engine
+├── database/
+│   ├── migrations/                      # All table schemas
+│   └── seeders/
+│       └── DatabaseSeeder.php           # Demo processes + users
+├── lang/
+│   ├── en/app.php                       # English translations (160+ keys)
+│   └── de/app.php                       # German translations (160+ keys)
+├── resources/views/
+│   ├── admin/                           # Analytics, audit log, user management
+│   ├── auth/                            # Login, register
+│   ├── dashboard/                       # Main dashboard
+│   ├── layouts/                         # App layout + sidebar
+│   ├── processes/                       # Process builder (create/edit/show)
+│   ├── runs/                            # Execution (execute/summary/paused)
+│   └── landing.blade.php               # Public landing page
+└── routes/web.php                       # All route definitions
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Database Schema
+
+### Core Tables
+
+| Table | Purpose |
+|-------|---------|
+| `processes` | Process templates with EN/DE names, status, versioning |
+| `process_steps` | Ordered questions with type (question/decision/loop_check/info/end) |
+| `step_options` | Answer choices with color coding |
+| `step_transitions` | Branching logic (next_step/goto_step/loop_back/start_process/end) |
+| `process_runs` | Active execution instances |
+| `run_responses` | All answers with loop iteration tracking |
+| `run_logs` | Complete audit trail |
+
+## How the Self-Checking Loop Works
+
+The core innovation - steps marked as **Loop Checkpoints** create automatic feedback loops:
+
+```
+Step 1: Do the work
+Step 2: [Loop Checkpoint] "Is the result OK?"
+  -> YES -> Continue to next phase
+  -> NO  -> Loop back to Step 1 (with loop counter)
+  -> After max_loops reached -> Auto-continue or escalate
+```
+
+Each loop iteration is tracked. The system records:
+- How many times a step was revisited
+- What answer was given each time
+- Total loop count per run
+- Duration and completion status
+
+## User Roles & Permissions
+
+| Feature | Admin | Team Lead | Employee |
+|---------|-------|-----------|----------|
+| Create/Edit processes | Yes | Own only | No |
+| Delete processes | Yes | Own only | No |
+| Start process runs | Yes | Yes | Yes |
+| View audit trail | All | Own team | Own runs |
+| Manage users | Yes | No | No |
+| View analytics | Yes | Own team | No |
+
+## Routes
+
+| URL | Description |
+|-----|-------------|
+| `/` | Landing page |
+| `/login` | Login |
+| `/register` | Register |
+| `/dashboard` | Main dashboard |
+| `/processes` | Process list |
+| `/processes-create` | Process builder |
+| `/processes/{id}/edit` | Edit process with steps/options/transitions |
+| `/processes/{id}` | Process preview with flow visualization |
+| `/runs` | My process runs |
+| `/runs/{id}` | Execute a process step-by-step |
+| `/runs/{id}/summary` | Run completion summary + audit trail |
+| `/admin/analytics` | Analytics dashboard |
+| `/admin/audit-log` | Full audit log |
+| `/admin/users` | User management |
+
+## Development
+
+```bash
+# Run dev server with hot reload
+php artisan serve &
+npm run dev
+
+# Run tests
+php artisan test
+
+# Fresh migration with seed
+php artisan migrate:fresh --seed
+```
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+MIT
