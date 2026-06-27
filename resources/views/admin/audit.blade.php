@@ -17,6 +17,14 @@
             </select>
             <button type="submit" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">{{ __('app.search') }}</button>
         </form>
+        <div class="flex items-center gap-2 mt-3">
+            <a href="{{ route('export.audit.csv', request()->query()) }}" class="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500">
+                {{ __('app.export') }} CSV
+            </a>
+            <a href="{{ route('export.audit.pdf', request()->query()) }}" class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500">
+                {{ __('app.export') }} PDF
+            </a>
+        </div>
     </div>
 
     <div class="overflow-hidden bg-white shadow sm:rounded-lg">

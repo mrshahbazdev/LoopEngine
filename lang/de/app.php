@@ -230,4 +230,50 @@ return [
     'preview' => 'Vorschau',
     'export' => 'Exportieren',
     'import' => 'Importieren',
+
+    // Duplication & Versioning
+    'process_duplicated' => 'Prozess erfolgreich dupliziert.',
+    'new_version' => 'Neue Version',
+    'version_created' => 'Version :version erfolgreich erstellt.',
+    'version_history' => 'Versionshistorie',
+
+    // Team
+    'team' => 'Team',
+    'team_dashboard' => 'Team-Dashboard',
+    'assign_process' => 'Prozess zuweisen',
+    'assigned_to' => 'Zugewiesen an',
+    'assigned_by_label' => 'Zugewiesen von',
+    'assignments' => 'Zuweisungen',
+    'assignment_created' => 'Prozess erfolgreich zugewiesen.',
+    'assignment_removed' => 'Zuweisung entfernt.',
+    'confirm_remove_assignment' => 'Diese Zuweisung entfernen?',
+    'no_assignments' => 'Noch keine Zuweisungen.',
+    'recent_assignments' => 'Letzte Zuweisungen',
+    'assignment_status_pending' => 'Ausstehend',
+    'assignment_status_in_progress' => 'In Bearbeitung',
+    'assignment_status_completed' => 'Abgeschlossen',
+    'pending' => 'Ausstehend',
+    'select_process' => 'Prozess auswählen',
+    'select_user' => 'Benutzer auswählen',
+    'notes' => 'Notizen',
+
+    // Drag & Drop
+    'drag_to_reorder' => 'Ziehen zum Neuordnen',
+
+    // Notifications
+    'process_assigned_subject' => 'Neuer Prozess zugewiesen: :process',
+    'hello' => 'Hallo :name,',
+    'process_assigned_body' => ':assigner hat Ihnen den Prozess ":process" zugewiesen.',
+    'process_assigned_footer' => 'Bitte erledigen Sie diesen Prozess so bald wie möglich.',
+    'run_completed_subject' => 'Prozess abgeschlossen: :process',
+    'run_completed_body' => 'Der Prozess ":process" wurde mit :loops Schleife(n) abgeschlossen.',
+    'run_completed_footer' => 'Sie können die vollständige Zusammenfassung in LoopEngine einsehen.',
+
+    // API
+    'api_tokens' => 'API-Token',
+    'create_token' => 'Token erstellen',
+    'token_name' => 'Token-Name',
+    'token_created' => 'API-Token erstellt. Kopieren Sie ihn jetzt — er wird nicht erneut angezeigt.',
+    'revoke' => 'Widerrufen',
+    'token_revoked' => 'Token widerrufen.',
 ];

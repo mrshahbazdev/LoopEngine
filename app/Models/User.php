@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable;
 
     protected $fillable = [
         'name',
@@ -19,6 +20,7 @@ class User extends Authenticatable
         'password',
         'role',
         'locale',
+        'team',
     ];
 
     protected $hidden = [
@@ -67,5 +69,15 @@ class User extends Authenticatable
     public function runLogs(): HasMany
     {
         return $this->hasMany(RunLog::class);
+    }
+
+    public function assignments(): HasMany
+    {
+        return $this->hasMany(TeamAssignment::class);
+    }
+
+    public function pendingAssignments(): HasMany
+    {
+        return $this->hasMany(TeamAssignment::class)->where('status', 'pending');
     }
 }

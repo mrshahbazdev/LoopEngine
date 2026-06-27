@@ -10,6 +10,7 @@ use App\Models\RunResponse;
 use App\Models\StepOption;
 use App\Models\StepTransition;
 use App\Models\User;
+use App\Notifications\ProcessRunCompleted;
 
 class ProcessEngine
 {
@@ -198,6 +199,23 @@ class ProcessEngine
             'total_loops' => $run->loop_count,
             'duration_minutes' => $run->started_at->diffInMinutes(now()),
         ]);
+
+        // Notify the process creator and the user who ran it
+        $run->load('process.creator');
+        $creator = $run->process->creator;
+        if ($creator && $creator->id !== $user->id) {
+            $creator->notify(new ProcessRunCompleted($run));
+        }
+        $user->notify(new ProcessRunCompleted($run));
+
+        // Update team assignment status if applicable
+        $assignment = \App\Models\TeamAssignment::where('process_id', $run->process_id)
+            ->where('user_id', $user->id)
+            ->where('status', '!=', 'completed')
+            ->first();
+        if ($assignment) {
+            $assignment->update(['status' => 'completed', 'completed_at' => now()]);
+        }
 
         return [
             'action' => 'end',
