@@ -94,8 +94,16 @@
             </ul>
         </div>
 
-        <div class="flex justify-between">
+        <div class="flex items-center justify-between">
             <a href="{{ route('runs.index') }}" class="text-sm text-gray-600 hover:text-gray-900">&larr; {{ __('app.back') }}</a>
+            <div class="flex items-center gap-2">
+                <a href="{{ route('export.run.csv', $run) }}" class="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500">
+                    {{ __('app.export') }} CSV
+                </a>
+                <a href="{{ route('export.run.pdf', $run) }}" class="rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500">
+                    {{ __('app.export') }} PDF
+                </a>
+            </div>
         </div>
     </div>
 </x-layouts.app>

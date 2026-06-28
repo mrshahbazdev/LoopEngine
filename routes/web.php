@@ -3,9 +3,11 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\ProcessController;
 use App\Http\Controllers\RunController;
+use App\Http\Controllers\TeamController;
 use Illuminate\Support\Facades\Route;
 
 // Landing
@@ -43,6 +45,8 @@ Route::middleware('auth')->group(function () {
         Route::delete('/processes/{process}', [ProcessController::class, 'destroy'])->name('processes.destroy');
         Route::post('/processes/{process}/activate', [ProcessController::class, 'activate'])->name('processes.activate');
         Route::post('/processes/{process}/archive', [ProcessController::class, 'archive'])->name('processes.archive');
+        Route::post('/processes/{process}/duplicate', [ProcessController::class, 'duplicate'])->name('processes.duplicate');
+        Route::post('/processes/{process}/version', [ProcessController::class, 'createVersion'])->name('processes.version');
 
         // Steps
         Route::post('/processes/{process}/steps', [ProcessController::class, 'storeStep'])->name('steps.store');
@@ -68,6 +72,21 @@ Route::middleware('auth')->group(function () {
     Route::post('/runs/{run}/resume', [RunController::class, 'resume'])->name('runs.resume');
     Route::post('/runs/{run}/cancel', [RunController::class, 'cancel'])->name('runs.cancel');
     Route::get('/runs/{run}/summary', [RunController::class, 'summary'])->name('runs.summary');
+
+    // Team
+    Route::get('/team', [TeamController::class, 'teamDashboard'])->name('team.dashboard');
+    Route::get('/team/assignments', [TeamController::class, 'assignments'])->name('team.assignments');
+    Route::middleware('role:admin,team_lead')->group(function () {
+        Route::get('/team/assign', [TeamController::class, 'assignForm'])->name('team.assign-form');
+        Route::post('/team/assign', [TeamController::class, 'assign'])->name('team.assign');
+        Route::delete('/team/assignments/{assignment}', [TeamController::class, 'removeAssignment'])->name('team.remove-assignment');
+    });
+
+    // Exports
+    Route::get('/export/audit/csv', [ExportController::class, 'auditCsv'])->name('export.audit.csv');
+    Route::get('/export/audit/pdf', [ExportController::class, 'auditPdf'])->name('export.audit.pdf');
+    Route::get('/export/run/{run}/csv', [ExportController::class, 'runSummaryCsv'])->name('export.run.csv');
+    Route::get('/export/run/{run}/pdf', [ExportController::class, 'runSummaryPdf'])->name('export.run.pdf');
 
     // Admin
     Route::middleware('role:admin')->prefix('admin')->group(function () {

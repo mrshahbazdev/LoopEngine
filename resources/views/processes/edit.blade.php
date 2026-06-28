@@ -23,6 +23,14 @@
                             <button type="submit" class="rounded bg-gray-600 px-2.5 py-1 text-xs font-semibold text-white hover:bg-gray-500">{{ __('app.archive') }}</button>
                         </form>
                     @endif
+                    <form method="POST" action="{{ route('processes.duplicate', $process) }}">
+                        @csrf
+                        <button type="submit" class="rounded bg-blue-600 px-2.5 py-1 text-xs font-semibold text-white hover:bg-blue-500">{{ __('app.duplicate') }}</button>
+                    </form>
+                    <form method="POST" action="{{ route('processes.version', $process) }}">
+                        @csrf
+                        <button type="submit" class="rounded bg-purple-600 px-2.5 py-1 text-xs font-semibold text-white hover:bg-purple-500">{{ __('app.new_version') }}</button>
+                    </form>
                 </div>
             </div>
             <form method="POST" action="{{ route('processes.update', $process) }}" class="space-y-4">
@@ -65,12 +73,12 @@
             </div>
 
             {{-- Existing Steps --}}
-            <div class="space-y-4 mb-8">
+            <div class="space-y-4 mb-8" id="steps-sortable" x-data="stepReorder({{ $process->id }})">
                 @forelse($process->steps as $step)
-                    <div class="rounded-lg border {{ $step->is_loop_checkpoint ? 'border-indigo-300 bg-indigo-50' : 'border-gray-200' }} p-4" x-data="{ expanded: false }">
+                    <div class="rounded-lg border {{ $step->is_loop_checkpoint ? 'border-indigo-300 bg-indigo-50' : 'border-gray-200' }} p-4" x-data="{ expanded: false }" data-step-id="{{ $step->id }}">
                         <div class="flex items-center justify-between cursor-pointer" @click="expanded = !expanded">
                             <div class="flex items-center gap-3">
-                                <span class="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100 text-sm font-medium text-indigo-600">{{ $step->order + 1 }}</span>
+                                <span class="drag-handle cursor-grab active:cursor-grabbing flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100 text-sm font-medium text-indigo-600" @click.stop title="{{ __('app.drag_to_reorder') }}">{{ $step->order + 1 }}</span>
                                 <div>
                                     <p class="text-sm font-medium text-gray-900">{{ $step->question_en }}</p>
                                     <div class="flex items-center gap-2 mt-1">

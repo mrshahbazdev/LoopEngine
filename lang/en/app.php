@@ -230,4 +230,50 @@ return [
     'preview' => 'Preview',
     'export' => 'Export',
     'import' => 'Import',
+
+    // Duplication & Versioning
+    'process_duplicated' => 'Process duplicated successfully.',
+    'new_version' => 'New Version',
+    'version_created' => 'Version :version created successfully.',
+    'version_history' => 'Version History',
+
+    // Team
+    'team' => 'Team',
+    'team_dashboard' => 'Team Dashboard',
+    'assign_process' => 'Assign Process',
+    'assigned_to' => 'Assigned To',
+    'assigned_by_label' => 'Assigned By',
+    'assignments' => 'Assignments',
+    'assignment_created' => 'Process assigned successfully.',
+    'assignment_removed' => 'Assignment removed.',
+    'confirm_remove_assignment' => 'Remove this assignment?',
+    'no_assignments' => 'No assignments yet.',
+    'recent_assignments' => 'Recent Assignments',
+    'assignment_status_pending' => 'Pending',
+    'assignment_status_in_progress' => 'In Progress',
+    'assignment_status_completed' => 'Completed',
+    'pending' => 'Pending',
+    'select_process' => 'Select a process',
+    'select_user' => 'Select a user',
+    'notes' => 'Notes',
+
+    // Drag & Drop
+    'drag_to_reorder' => 'Drag to reorder',
+
+    // Notifications
+    'process_assigned_subject' => 'New Process Assigned: :process',
+    'hello' => 'Hello :name,',
+    'process_assigned_body' => ':assigner has assigned you the process ":process".',
+    'process_assigned_footer' => 'Please complete this process at your earliest convenience.',
+    'run_completed_subject' => 'Process Completed: :process',
+    'run_completed_body' => 'The process ":process" has been completed with :loops loop(s).',
+    'run_completed_footer' => 'You can view the full summary in LoopEngine.',
+
+    // API
+    'api_tokens' => 'API Tokens',
+    'create_token' => 'Create Token',
+    'token_name' => 'Token Name',
+    'token_created' => 'API token created. Copy it now — it won\'t be shown again.',
+    'revoke' => 'Revoke',
+    'token_revoked' => 'Token revoked.',
 ];
