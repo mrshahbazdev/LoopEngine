@@ -45,6 +45,16 @@
                             {{ __('app.runs') }}
                         </a>
                     </li>
+                    {{-- Templates --}}
+                    <li>
+                        <a href="{{ route('templates.index') }}"
+                           class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold {{ request()->routeIs('templates.*') ? 'bg-indigo-800 text-white' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white' }}">
+                            <svg class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" />
+                            </svg>
+                            {{ __('app.templates') }}
+                        </a>
+                    </li>
                     {{-- Team --}}
                     <li>
                         <a href="{{ route('team.dashboard') }}"
@@ -57,6 +67,23 @@
                     </li>
                 </ul>
             </li>
+
+            @if(auth()->user()->canManageProcesses())
+            <li>
+                <div class="text-xs font-semibold uppercase tracking-wider text-indigo-400">{{ __('app.integrations') }}</div>
+                <ul role="list" class="-mx-2 mt-2 space-y-1">
+                    <li>
+                        <a href="{{ route('webhooks.index') }}"
+                           class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold {{ request()->routeIs('webhooks.*') ? 'bg-indigo-800 text-white' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white' }}">
+                            <svg class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+                            </svg>
+                            {{ __('app.webhooks') }}
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            @endif
 
             @if(auth()->user()->isAdmin())
             <li>
@@ -87,6 +114,15 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
                             </svg>
                             {{ __('app.users') }}
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('admin.permissions') }}"
+                           class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold {{ request()->routeIs('admin.permissions') ? 'bg-indigo-800 text-white' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white' }}">
+                            <svg class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+                            </svg>
+                            {{ __('app.permissions') }}
                         </a>
                     </li>
                 </ul>

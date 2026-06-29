@@ -14,6 +14,13 @@ use App\Notifications\ProcessRunCompleted;
 
 class ProcessEngine
 {
+    protected WebhookService $webhookService;
+
+    public function __construct(WebhookService $webhookService)
+    {
+        $this->webhookService = $webhookService;
+    }
+
     public function startRun(Process $process, User $user): ProcessRun
     {
         $firstStep = $process->firstStep();
@@ -30,6 +37,12 @@ class ProcessEngine
         $this->log($run, $user, 'started', [
             'process_name' => $process->name_en,
             'first_step' => $firstStep?->question_en,
+        ]);
+
+        $this->webhookService->dispatch('run.started', [
+            'run_id' => $run->id,
+            'process' => $process->name_en,
+            'user' => $user->name,
         ]);
 
         return $run;
@@ -159,6 +172,11 @@ class ProcessEngine
             'loop_count' => $run->loop_count,
         ]);
 
+        $this->webhookService->dispatch('run.looped_back', [
+            'run_id' => $run->id,
+            'loop_count' => $run->loop_count,
+        ]);
+
         $targetStep = ProcessStep::findOrFail($targetStepId);
 
         return [
@@ -217,6 +235,13 @@ class ProcessEngine
             $assignment->update(['status' => 'completed', 'completed_at' => now()]);
         }
 
+        $this->webhookService->dispatch('run.completed', [
+            'run_id' => $run->id,
+            'process' => $run->process->name_en,
+            'user' => $user->name,
+            'loop_count' => $run->loop_count,
+        ]);
+
         return [
             'action' => 'end',
             'run' => $run->fresh(),
@@ -227,6 +252,7 @@ class ProcessEngine
     {
         $run->update(['status' => 'paused']);
         $this->log($run, $user, 'paused');
+        $this->webhookService->dispatch('run.paused', ['run_id' => $run->id]);
         return $run->fresh();
     }
 
@@ -244,6 +270,7 @@ class ProcessEngine
             'completed_at' => now(),
         ]);
         $this->log($run, $user, 'cancelled');
+        $this->webhookService->dispatch('run.cancelled', ['run_id' => $run->id]);
         return $run->fresh();
     }
 

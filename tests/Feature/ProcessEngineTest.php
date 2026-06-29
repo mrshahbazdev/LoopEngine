@@ -9,6 +9,7 @@ use App\Models\StepOption;
 use App\Models\StepTransition;
 use App\Models\User;
 use App\Services\ProcessEngine;
+use App\Services\WebhookService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -23,7 +24,7 @@ class ProcessEngineTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->engine = new ProcessEngine();
+        $this->engine = new ProcessEngine(new WebhookService());
         $this->admin = User::factory()->create(['role' => 'admin']);
     }
 

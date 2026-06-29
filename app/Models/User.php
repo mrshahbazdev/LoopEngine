@@ -80,4 +80,42 @@ class User extends Authenticatable
     {
         return $this->hasMany(TeamAssignment::class)->where('status', 'pending');
     }
+
+    public function permissions(): HasMany
+    {
+        return $this->hasMany(Permission::class);
+    }
+
+    public function webhooks(): HasMany
+    {
+        return $this->hasMany(Webhook::class, 'created_by');
+    }
+
+    public function hasPermission(string $permission): bool
+    {
+        if ($this->isAdmin()) {
+            return true;
+        }
+
+        return $this->permissions()->where('permission', $permission)->exists();
+    }
+
+    public function grantPermission(string $permission): void
+    {
+        $this->permissions()->firstOrCreate(['permission' => $permission]);
+    }
+
+    public function revokePermission(string $permission): void
+    {
+        $this->permissions()->where('permission', $permission)->delete();
+    }
+
+    public function getAllPermissions(): array
+    {
+        if ($this->isAdmin()) {
+            return array_keys(Permission::AVAILABLE);
+        }
+
+        return $this->permissions()->pluck('permission')->toArray();
+    }
 }
