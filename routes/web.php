@@ -6,8 +6,11 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\ProcessController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\RunController;
 use App\Http\Controllers\TeamController;
+use App\Http\Controllers\TemplateController;
+use App\Http\Controllers\WebhookController;
 use Illuminate\Support\Facades\Route;
 
 // Landing
@@ -82,6 +85,29 @@ Route::middleware('auth')->group(function () {
         Route::delete('/team/assignments/{assignment}', [TeamController::class, 'removeAssignment'])->name('team.remove-assignment');
     });
 
+    // Templates marketplace
+    Route::get('/templates', [TemplateController::class, 'index'])->name('templates.index');
+    Route::get('/templates/{template}', [TemplateController::class, 'show'])->name('templates.show');
+    Route::post('/templates/{template}/install', [TemplateController::class, 'install'])->name('templates.install');
+    Route::post('/templates/{template}/rate', [TemplateController::class, 'rate'])->name('templates.rate');
+    Route::get('/templates/{template}/export', [TemplateController::class, 'export'])->name('templates.export');
+    Route::middleware('role:admin,team_lead')->group(function () {
+        Route::get('/templates-share', [TemplateController::class, 'share'])->name('templates.share');
+        Route::post('/templates-share', [TemplateController::class, 'storeShare'])->name('templates.store-share');
+    });
+
+    // Webhooks
+    Route::middleware('role:admin,team_lead')->group(function () {
+        Route::get('/webhooks', [WebhookController::class, 'index'])->name('webhooks.index');
+        Route::get('/webhooks/create', [WebhookController::class, 'create'])->name('webhooks.create');
+        Route::post('/webhooks', [WebhookController::class, 'store'])->name('webhooks.store');
+        Route::get('/webhooks/{webhook}/edit', [WebhookController::class, 'edit'])->name('webhooks.edit');
+        Route::put('/webhooks/{webhook}', [WebhookController::class, 'update'])->name('webhooks.update');
+        Route::delete('/webhooks/{webhook}', [WebhookController::class, 'destroy'])->name('webhooks.destroy');
+        Route::get('/webhooks/{webhook}/logs', [WebhookController::class, 'logs'])->name('webhooks.logs');
+        Route::post('/webhooks/{webhook}/toggle', [WebhookController::class, 'toggle'])->name('webhooks.toggle');
+    });
+
     // Exports
     Route::get('/export/audit/csv', [ExportController::class, 'auditCsv'])->name('export.audit.csv');
     Route::get('/export/audit/pdf', [ExportController::class, 'auditPdf'])->name('export.audit.pdf');
@@ -96,5 +122,9 @@ Route::middleware('auth')->group(function () {
         Route::post('/users', [AdminController::class, 'storeUser'])->name('admin.users.store');
         Route::put('/users/{user}', [AdminController::class, 'updateUser'])->name('admin.users.update');
         Route::delete('/users/{user}', [AdminController::class, 'destroyUser'])->name('admin.users.destroy');
+
+        // Permissions
+        Route::get('/permissions', [PermissionController::class, 'index'])->name('admin.permissions');
+        Route::put('/permissions/{user}', [PermissionController::class, 'update'])->name('admin.permissions.update');
     });
 });

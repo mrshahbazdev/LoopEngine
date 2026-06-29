@@ -6,10 +6,15 @@ use App\Models\Process;
 use App\Models\ProcessStep;
 use App\Models\StepOption;
 use App\Models\StepTransition;
+use App\Services\WebhookService;
 use Illuminate\Http\Request;
 
 class ProcessController extends Controller
 {
+    public function __construct(
+        protected WebhookService $webhookService,
+    ) {}
+
     public function index(Request $request)
     {
         $query = Process::with('creator')->withCount(['steps', 'runs']);
@@ -110,6 +115,7 @@ class ProcessController extends Controller
     {
         $this->authorizeProcess($process);
         $process->update(['status' => 'active']);
+        $this->webhookService->dispatch('process.activated', ['process_id' => $process->id, 'name' => $process->name_en]);
         return back()->with('success', __('app.process_activated'));
     }
 
@@ -117,6 +123,7 @@ class ProcessController extends Controller
     {
         $this->authorizeProcess($process);
         $process->update(['status' => 'archived']);
+        $this->webhookService->dispatch('process.archived', ['process_id' => $process->id, 'name' => $process->name_en]);
         return back()->with('success', __('app.process_archived'));
     }
 

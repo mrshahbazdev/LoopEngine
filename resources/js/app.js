@@ -1,4 +1,7 @@
 import Alpine from 'alpinejs';
+import { Chart, LineController, LineElement, PointElement, CategoryScale, LinearScale, Filler, Tooltip, Legend } from 'chart.js';
+
+Chart.register(LineController, LineElement, PointElement, CategoryScale, LinearScale, Filler, Tooltip, Legend);
 
 window.Alpine = Alpine;
 
@@ -96,6 +99,63 @@ Alpine.data('flashMessage', () => ({
         setTimeout(() => { this.show = false; }, 5000);
     }
 }));
+
+// Dashboard runs chart
+window.runsChart = () => ({
+    chart: null,
+    init() {
+        const canvas = this.$refs.runsCanvas;
+        if (!canvas) return;
+
+        const dataEl = document.getElementById('runs-chart-data');
+        if (!dataEl) return;
+
+        const data = JSON.parse(dataEl.textContent);
+        const isDark = document.documentElement.classList.contains('dark');
+
+        this.chart = new Chart(canvas, {
+            type: 'line',
+            data: {
+                labels: data.map(d => d.date),
+                datasets: [{
+                    label: 'Total',
+                    data: data.map(d => d.count),
+                    borderColor: '#6366f1',
+                    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                }, {
+                    label: 'Completed',
+                    data: data.map(d => d.completed),
+                    borderColor: '#22c55e',
+                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        labels: { color: isDark ? '#d1d5db' : '#374151', font: { size: 11 } }
+                    }
+                },
+                scales: {
+                    x: {
+                        ticks: { color: isDark ? '#9ca3af' : '#6b7280', font: { size: 10 }, maxTicksLimit: 7 },
+                        grid: { color: isDark ? '#374151' : '#e5e7eb' }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: { color: isDark ? '#9ca3af' : '#6b7280', stepSize: 1 },
+                        grid: { color: isDark ? '#374151' : '#e5e7eb' }
+                    }
+                }
+            }
+        });
+    }
+});
 
 Alpine.start();
 
