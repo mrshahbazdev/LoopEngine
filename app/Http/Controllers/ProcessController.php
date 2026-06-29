@@ -246,6 +246,24 @@ class ProcessController extends Controller
         return back()->with('success', __('app.process_saved'));
     }
 
+    public function duplicate(Process $process)
+    {
+        $clone = $process->duplicate(request()->user());
+
+        return redirect()->route('processes.edit', $clone)
+            ->with('success', __('app.process_duplicated'));
+    }
+
+    public function createVersion(Process $process)
+    {
+        $this->authorizeProcess($process);
+
+        $newVersion = $process->createNewVersion(request()->user());
+
+        return redirect()->route('processes.edit', $newVersion)
+            ->with('success', __('app.version_created', ['version' => $newVersion->version]));
+    }
+
     protected function authorizeProcess(Process $process): void
     {
         $user = request()->user();
