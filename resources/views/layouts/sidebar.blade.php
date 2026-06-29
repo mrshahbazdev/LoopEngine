@@ -1,4 +1,4 @@
-<div class="flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-950 px-6 pb-4">
+<div class="flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-950 px-6 pb-4 transition-colors">
     <div class="flex h-16 shrink-0 items-center">
         <a href="{{ route('dashboard') }}" class="flex items-center gap-2">
             <svg class="h-8 w-8 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

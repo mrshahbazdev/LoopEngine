@@ -2,6 +2,37 @@ import Alpine from 'alpinejs';
 
 window.Alpine = Alpine;
 
+// Dark mode with localStorage persistence
+Alpine.data('darkMode', () => ({
+    dark: false,
+    init() {
+        const stored = localStorage.getItem('loopengine-theme');
+        if (stored === 'dark') {
+            this.dark = true;
+        } else if (stored === 'light') {
+            this.dark = false;
+        } else {
+            this.dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        }
+        this.applyTheme();
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (!localStorage.getItem('loopengine-theme')) {
+                this.dark = e.matches;
+                this.applyTheme();
+            }
+        });
+    },
+    toggle() {
+        this.dark = !this.dark;
+        localStorage.setItem('loopengine-theme', this.dark ? 'dark' : 'light');
+        this.applyTheme();
+    },
+    applyTheme() {
+        document.documentElement.classList.toggle('dark', this.dark);
+    }
+}));
+
 // Step reorder with drag-and-drop
 Alpine.data('stepReorder', (processId) => ({
     dragging: null,
@@ -58,4 +89,20 @@ Alpine.data('stepReorder', (processId) => ({
     }
 }));
 
+// Flash message auto-dismiss
+Alpine.data('flashMessage', () => ({
+    show: true,
+    init() {
+        setTimeout(() => { this.show = false; }, 5000);
+    }
+}));
+
 Alpine.start();
+
+// Apply dark mode immediately before Alpine boots (prevent flash)
+(function() {
+    const stored = localStorage.getItem('loopengine-theme');
+    if (stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark');
+    }
+})();
