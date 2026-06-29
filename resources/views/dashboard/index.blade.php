@@ -97,6 +97,85 @@
         </div>
     </div>
 
+    {{-- Charts --}}
+    <div class="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-2">
+        {{-- Runs per Day Chart --}}
+        <div class="overflow-hidden rounded-lg bg-white dark:bg-gray-800 shadow transition-colors animate-slide-in-up stagger-3 p-6">
+            <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white mb-4">{{ __('app.runs_over_time') }}</h3>
+            <div x-data="runsChart()" x-init="init()" class="h-48">
+                <canvas x-ref="runsCanvas"></canvas>
+            </div>
+        </div>
+
+        {{-- Status Breakdown --}}
+        <div class="overflow-hidden rounded-lg bg-white dark:bg-gray-800 shadow transition-colors animate-slide-in-up stagger-4 p-6">
+            <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white mb-4">{{ __('app.status_breakdown') }}</h3>
+            <div class="space-y-3">
+                @php
+                    $statusColors = [
+                        'completed' => 'bg-green-500',
+                        'in_progress' => 'bg-blue-500',
+                        'paused' => 'bg-yellow-500',
+                        'cancelled' => 'bg-gray-400',
+                        'failed' => 'bg-red-500',
+                    ];
+                    $totalStatusCount = array_sum($statusBreakdown);
+                @endphp
+                @foreach($statusBreakdown as $status => $count)
+                    <div>
+                        <div class="flex items-center justify-between text-sm mb-1">
+                            <span class="text-gray-700 dark:text-gray-300">{{ __('app.run_status_' . $status) }}</span>
+                            <span class="font-semibold text-gray-900 dark:text-white">{{ $count }}</span>
+                        </div>
+                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                            <div class="{{ $statusColors[$status] ?? 'bg-gray-400' }} h-2 rounded-full transition-all duration-500" style="width: {{ $totalStatusCount > 0 ? round(($count / $totalStatusCount) * 100) : 0 }}%"></div>
+                        </div>
+                    </div>
+                @endforeach
+                @if(empty($statusBreakdown))
+                    <p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4">{{ __('app.no_data') }}</p>
+                @endif
+            </div>
+        </div>
+
+        {{-- Completion Rate by Process --}}
+        <div class="overflow-hidden rounded-lg bg-white dark:bg-gray-800 shadow transition-colors animate-slide-in-up stagger-5 p-6">
+            <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white mb-4">{{ __('app.completion_rate') }}</h3>
+            <div class="space-y-3">
+                @forelse($processStats as $ps)
+                    <div>
+                        <div class="flex items-center justify-between text-sm mb-1">
+                            <span class="text-gray-700 dark:text-gray-300 truncate max-w-[60%]">{{ $ps['name'] }}</span>
+                            <span class="font-semibold text-gray-900 dark:text-white">{{ $ps['rate'] }}%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                            <div class="bg-indigo-500 h-2 rounded-full transition-all duration-500" style="width: {{ $ps['rate'] }}%"></div>
+                        </div>
+                        <div class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">{{ $ps['completed'] }}/{{ $ps['total'] }} {{ __('app.runs') }}</div>
+                    </div>
+                @empty
+                    <p class="text-sm text-gray-500 dark:text-gray-400 text-center py-4">{{ __('app.no_data') }}</p>
+                @endforelse
+            </div>
+        </div>
+
+        {{-- Loop Distribution --}}
+        <div class="overflow-hidden rounded-lg bg-white dark:bg-gray-800 shadow transition-colors animate-slide-in-up stagger-6 p-6">
+            <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white mb-4">{{ __('app.loop_distribution') }}</h3>
+            <div class="grid grid-cols-4 gap-3 text-center">
+                @php $loopRanges = ['0' => '0', '1-2' => '1-2', '3-5' => '3-5', '6+' => '6+']; @endphp
+                @foreach($loopRanges as $key => $label)
+                    <div class="rounded-lg bg-gray-50 dark:bg-gray-700/50 p-4 transition-colors">
+                        <div class="text-2xl font-bold text-indigo-600 dark:text-indigo-400">{{ $loopDistribution[$key] ?? 0 }}</div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">{{ $label }} {{ __('app.loops') }}</div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+
+    <script id="runs-chart-data" type="application/json">@json($runsPerDay)</script>
+
     {{-- Recent Activity --}}
     @if($recentActivity->isNotEmpty())
     <div class="mt-8 overflow-hidden rounded-lg bg-white dark:bg-gray-800 shadow transition-colors animate-slide-in-up stagger-3">

@@ -6,10 +6,15 @@ use App\Models\Process;
 use App\Models\TeamAssignment;
 use App\Models\User;
 use App\Notifications\ProcessAssigned;
+use App\Services\WebhookService;
 use Illuminate\Http\Request;
 
 class TeamController extends Controller
 {
+    public function __construct(
+        protected WebhookService $webhookService,
+    ) {}
+
     public function assignments(Request $request)
     {
         $user = $request->user();
@@ -55,6 +60,12 @@ class TeamController extends Controller
 
         $assignedUser = User::find($validated['user_id']);
         $assignedUser->notify(new ProcessAssigned($assignment));
+
+        $this->webhookService->dispatch('assignment.created', [
+            'process' => $process->name_en,
+            'user' => $assignedUser->name,
+            'assigned_by' => $request->user()->name,
+        ]);
 
         return back()->with('success', __('app.assignment_created'));
     }

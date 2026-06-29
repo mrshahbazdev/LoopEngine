@@ -49,6 +49,11 @@ class Process extends Model
         return $this->hasMany(TeamAssignment::class);
     }
 
+    public function template()
+    {
+        return $this->hasOne(ProcessTemplate::class);
+    }
+
     public function parent(): BelongsTo
     {
         return $this->belongsTo(self::class, 'parent_id');
