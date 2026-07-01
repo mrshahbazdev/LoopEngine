@@ -1,4 +1,4 @@
-# LoopEngine
+# EasySOP
 
 **Turn Thinking Into Systems** - A process decision loop platform that helps you build reusable thinking processes your entire team can follow, with automatic decisions, self-checking feedback loops (Regelkreislauf), and full audit trails.
 
@@ -92,8 +92,8 @@ You build a thinking process once - your whole team can apply it correctly, ever
 ### Setup
 
 ```bash
-git clone https://github.com/mrshahbazdev/LoopEngine.git
-cd LoopEngine
+git clone https://github.com/mrshahbazdev/EasySOP.git
+cd EasySOP
 
 composer install
 npm install
@@ -118,9 +118,9 @@ After running `php artisan db:seed`:
 
 | Role | Email | Password |
 |------|-------|----------|
-| Admin | admin@loopengine.test | password |
-| Team Lead | lead@loopengine.test | password |
-| Employee | employee@loopengine.test | password |
+| Admin | admin@easysop.test | password |
+| Team Lead | lead@easysop.test | password |
+| Employee | employee@easysop.test | password |
 
 ## Docker Setup
 
@@ -148,8 +148,8 @@ Set these in `docker-compose.yml` or `.env`:
 DB_CONNECTION=pgsql
 DB_HOST=db
 DB_PORT=5432
-DB_DATABASE=loopengine
-DB_USERNAME=loopengine
+DB_DATABASE=easysop
+DB_USERNAME=easysop
 DB_PASSWORD=secret
 MAIL_MAILER=smtp
 MAIL_HOST=mailpit
@@ -163,7 +163,7 @@ All API endpoints require Sanctum authentication. Generate a token via the app o
 ```bash
 curl -X POST http://localhost:8000/api/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"admin@loopengine.test","password":"password"}'
+  -d '{"email":"admin@easysop.test","password":"password"}'
 ```
 
 ### Endpoints
@@ -237,12 +237,12 @@ All responses follow the format:
 
 ### Signature Verification
 
-If a signing secret is configured, payloads include an `X-LoopEngine-Signature` header:
+If a signing secret is configured, payloads include an `X-EasySOP-Signature` header:
 
 ```python
 import hmac, hashlib
 expected = hmac.new(secret.encode(), payload_json.encode(), hashlib.sha256).hexdigest()
-assert request.headers['X-LoopEngine-Signature'] == expected
+assert request.headers['X-EasySOP-Signature'] == expected
 ```
 
 ### Events
@@ -289,7 +289,7 @@ Admins can assign individual permissions at **Admin > Permissions**. This allows
 ## Project Structure
 
 ```
-LoopEngine/
+EasySOP/
 ├── app/
 │   ├── Http/
 │   │   ├── Controllers/

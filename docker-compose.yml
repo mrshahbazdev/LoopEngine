@@ -11,8 +11,8 @@ services:
       - DB_CONNECTION=pgsql
       - DB_HOST=db
       - DB_PORT=5432
-      - DB_DATABASE=loopengine
-      - DB_USERNAME=loopengine
+      - DB_DATABASE=easysop
+      - DB_USERNAME=easysop
       - DB_PASSWORD=secret
       - MAIL_MAILER=smtp
       - MAIL_HOST=mailpit
@@ -26,13 +26,13 @@ services:
   db:
     image: postgres:16-alpine
     environment:
-      POSTGRES_DB: loopengine
-      POSTGRES_USER: loopengine
+      POSTGRES_DB: easysop
+      POSTGRES_USER: easysop
       POSTGRES_PASSWORD: secret
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U loopengine"]
+      test: ["CMD-SHELL", "pg_isready -U easysop"]
       interval: 5s
       timeout: 5s
       retries: 5

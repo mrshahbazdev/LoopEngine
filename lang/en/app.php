@@ -2,7 +2,7 @@
 
 return [
     // General
-    'app_name' => 'LoopEngine',
+    'app_name' => 'EasySOP',
     'tagline' => 'Turn Thinking Into Systems',
     'subtitle' => 'Build reusable decision processes your entire team can follow — with automatic decisions, self-checking feedback loops, and full audit trails.',
     'language' => 'Language',
@@ -267,7 +267,7 @@ return [
     'process_assigned_footer' => 'Please complete this process at your earliest convenience.',
     'run_completed_subject' => 'Process Completed: :process',
     'run_completed_body' => 'The process ":process" has been completed with :loops loop(s).',
-    'run_completed_footer' => 'You can view the full summary in LoopEngine.',
+    'run_completed_footer' => 'You can view the full summary in EasySOP.',
 
     // API
     'api_tokens' => 'API Tokens',

@@ -128,7 +128,7 @@ class TemplateController extends Controller
         $process = $template->process->load(['steps.options', 'steps.transitions']);
 
         $export = [
-            'loopengine_version' => '1.0',
+            'easysop_version' => '1.0',
             'template' => [
                 'name_en' => $template->name_en,
                 'name_de' => $template->name_de,

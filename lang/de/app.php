@@ -2,7 +2,7 @@
 
 return [
     // General
-    'app_name' => 'LoopEngine',
+    'app_name' => 'EasySOP',
     'tagline' => 'Denken in Systeme verwandeln',
     'subtitle' => 'Erstelle wiederverwendbare Entscheidungsprozesse, die dein gesamtes Team nutzen kann — mit automatischen Entscheidungen, selbstprüfenden Regelkreisläufen und vollständiger Nachverfolgung.',
     'language' => 'Sprache',
@@ -267,7 +267,7 @@ return [
     'process_assigned_footer' => 'Bitte erledigen Sie diesen Prozess so bald wie möglich.',
     'run_completed_subject' => 'Prozess abgeschlossen: :process',
     'run_completed_body' => 'Der Prozess ":process" wurde mit :loops Schleife(n) abgeschlossen.',
-    'run_completed_footer' => 'Sie können die vollständige Zusammenfassung in LoopEngine einsehen.',
+    'run_completed_footer' => 'Sie können die vollständige Zusammenfassung in EasySOP einsehen.',
 
     // API
     'api_tokens' => 'API-Token',
