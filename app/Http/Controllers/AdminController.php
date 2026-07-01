@@ -34,8 +34,9 @@ class AdminController extends Controller
             'processRuns as completed_runs_count' => function ($q) {
                 $q->where('status', 'completed');
             },
-        ])->having('process_runs_count', '>', 0)
-          ->get();
+        ])->get()
+          ->filter(fn ($u) => $u->process_runs_count > 0)
+          ->values();
 
         return view('admin.analytics', compact(
             'totalProcesses',
