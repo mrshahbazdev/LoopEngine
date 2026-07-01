@@ -54,14 +54,15 @@ class DashboardController extends Controller
                 'runs',
                 'runs as completed_runs_count' => fn ($q) => $q->where('status', 'completed'),
             ])
-            ->having('runs_count', '>', 0)
             ->get()
+            ->filter(fn ($p) => $p->runs_count > 0)
             ->map(fn ($p) => [
                 'name' => $p->localizedName(),
                 'total' => $p->runs_count,
                 'completed' => $p->completed_runs_count,
-                'rate' => $p->runs_count > 0 ? round(($p->completed_runs_count / $p->runs_count) * 100, 1) : 0,
-            ]);
+                'rate' => round(($p->completed_runs_count / $p->runs_count) * 100, 1),
+            ])
+            ->values();
 
         // Chart data: loop distribution
         $loopDistribution = ProcessRun::where('status', 'completed')
