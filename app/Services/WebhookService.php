@@ -32,12 +32,12 @@ class WebhookService
 
         $headers = [
             'Content-Type' => 'application/json',
-            'X-LoopEngine-Event' => $event,
+            'X-EasySOP-Event' => $event,
         ];
 
         if ($webhook->secret) {
             $signature = hash_hmac('sha256', json_encode($payload), $webhook->secret);
-            $headers['X-LoopEngine-Signature'] = $signature;
+            $headers['X-EasySOP-Signature'] = $signature;
         }
 
         try {
