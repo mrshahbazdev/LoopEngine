@@ -9,7 +9,7 @@ window.Alpine = Alpine;
 Alpine.data('darkMode', () => ({
     dark: false,
     init() {
-        const stored = localStorage.getItem('loopengine-theme');
+        const stored = localStorage.getItem('easysop-theme');
         if (stored === 'dark') {
             this.dark = true;
         } else if (stored === 'light') {
@@ -20,7 +20,7 @@ Alpine.data('darkMode', () => ({
         this.applyTheme();
 
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-            if (!localStorage.getItem('loopengine-theme')) {
+            if (!localStorage.getItem('easysop-theme')) {
                 this.dark = e.matches;
                 this.applyTheme();
             }
@@ -28,7 +28,7 @@ Alpine.data('darkMode', () => ({
     },
     toggle() {
         this.dark = !this.dark;
-        localStorage.setItem('loopengine-theme', this.dark ? 'dark' : 'light');
+        localStorage.setItem('easysop-theme', this.dark ? 'dark' : 'light');
         this.applyTheme();
     },
     applyTheme() {
@@ -161,7 +161,7 @@ Alpine.start();
 
 // Apply dark mode immediately before Alpine boots (prevent flash)
 (function() {
-    const stored = localStorage.getItem('loopengine-theme');
+    const stored = localStorage.getItem('easysop-theme');
     if (stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.classList.add('dark');
     }

@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
         // Create users
         $admin = User::create([
             'name' => 'Admin User',
-            'email' => 'admin@loopengine.test',
+            'email' => 'admin@easysop.test',
             'password' => Hash::make('password'),
             'role' => 'admin',
             'locale' => 'en',
@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
 
         $teamLead = User::create([
             'name' => 'Team Lead',
-            'email' => 'lead@loopengine.test',
+            'email' => 'lead@easysop.test',
             'password' => Hash::make('password'),
             'role' => 'team_lead',
             'locale' => 'en',
@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
 
         $employee = User::create([
             'name' => 'Employee User',
-            'email' => 'employee@loopengine.test',
+            'email' => 'employee@easysop.test',
             'password' => Hash::make('password'),
             'role' => 'employee',
             'locale' => 'en',

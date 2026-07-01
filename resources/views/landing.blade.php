@@ -6,7 +6,7 @@
     <title>{{ __('app.app_name') }} - {{ __('app.tagline') }}</title>
     <script>
         (function() {
-            var s = localStorage.getItem('loopengine-theme');
+            var s = localStorage.getItem('easysop-theme');
             if (s === 'dark' || (!s && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
                 document.documentElement.classList.add('dark');
             }
