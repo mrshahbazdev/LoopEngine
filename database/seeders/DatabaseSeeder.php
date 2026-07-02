@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Company;
 use App\Models\Process;
 use App\Models\ProcessStep;
 use App\Models\StepOption;
@@ -14,13 +15,28 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // Create users
+        // Create Company 1: Acme Corp
+        $company1 = Company::create([
+            'name' => 'Acme Corp',
+            'slug' => 'acme-corp',
+            'description' => 'Quality assurance and process management company.',
+        ]);
+
+        // Create Company 2: TechStart GmbH
+        $company2 = Company::create([
+            'name' => 'TechStart GmbH',
+            'slug' => 'techstart-gmbh',
+            'description' => 'Software development agency.',
+        ]);
+
+        // Company 1 users
         $admin = User::create([
             'name' => 'Admin User',
             'email' => 'admin@easysop.test',
             'password' => Hash::make('password'),
             'role' => 'admin',
             'locale' => 'en',
+            'company_id' => $company1->id,
         ]);
 
         $teamLead = User::create([
@@ -29,6 +45,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
             'role' => 'team_lead',
             'locale' => 'en',
+            'company_id' => $company1->id,
         ]);
 
         $employee = User::create([
@@ -37,15 +54,36 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('password'),
             'role' => 'employee',
             'locale' => 'en',
+            'company_id' => $company1->id,
         ]);
 
-        // Create a sample process: Quality Check Loop
+        // Company 2 users
+        $admin2 = User::create([
+            'name' => 'Max Mustermann',
+            'email' => 'admin@techstart.test',
+            'password' => Hash::make('password'),
+            'role' => 'admin',
+            'locale' => 'de',
+            'company_id' => $company2->id,
+        ]);
+
+        $employee2 = User::create([
+            'name' => 'Lisa Schmidt',
+            'email' => 'lisa@techstart.test',
+            'password' => Hash::make('password'),
+            'role' => 'employee',
+            'locale' => 'de',
+            'company_id' => $company2->id,
+        ]);
+
+        // Create a sample process for Company 1: Quality Check Loop
         $process = Process::create([
             'name_en' => 'Quality Check Process',
             'name_de' => 'Qualitätsprüfung Prozess',
             'description_en' => 'A self-checking quality assurance process with feedback loops.',
             'description_de' => 'Ein selbstprüfender Qualitätssicherungsprozess mit Regelkreisläufen.',
             'created_by' => $admin->id,
+            'company_id' => $company1->id,
             'status' => 'active',
             'version' => 1,
             'category' => 'Quality',
@@ -136,57 +174,24 @@ class DatabaseSeeder extends Seeder
         ]);
 
         // Transitions
-        // Step 1: Yes → next, No → end
-        StepTransition::create([
-            'step_id' => $step1->id, 'option_id' => $s1_yes->id,
-            'action_type' => 'next_step',
-        ]);
-        StepTransition::create([
-            'step_id' => $step1->id, 'option_id' => $s1_no->id,
-            'action_type' => 'end',
-        ]);
+        StepTransition::create(['step_id' => $step1->id, 'option_id' => $s1_yes->id, 'action_type' => 'next_step']);
+        StepTransition::create(['step_id' => $step1->id, 'option_id' => $s1_no->id, 'action_type' => 'end']);
+        StepTransition::create(['step_id' => $step2->id, 'option_id' => $s2_pass->id, 'action_type' => 'next_step']);
+        StepTransition::create(['step_id' => $step2->id, 'option_id' => $s2_fail->id, 'action_type' => 'loop_back', 'target_step_id' => $step1->id]);
+        StepTransition::create(['step_id' => $step2->id, 'option_id' => $s2_partial->id, 'action_type' => 'loop_back', 'target_step_id' => $step1->id]);
+        StepTransition::create(['step_id' => $step3->id, 'option_id' => $s3_yes->id, 'action_type' => 'next_step']);
+        StepTransition::create(['step_id' => $step3->id, 'option_id' => $s3_no->id, 'action_type' => 'loop_back', 'target_step_id' => $step3->id]);
+        StepTransition::create(['step_id' => $step4->id, 'option_id' => $s4_approve->id, 'action_type' => 'end']);
+        StepTransition::create(['step_id' => $step4->id, 'option_id' => $s4_reject->id, 'action_type' => 'loop_back', 'target_step_id' => $step1->id]);
 
-        // Step 2: Pass → next, Fail → loop back to step 1, Partial → loop back to step 1
-        StepTransition::create([
-            'step_id' => $step2->id, 'option_id' => $s2_pass->id,
-            'action_type' => 'next_step',
-        ]);
-        StepTransition::create([
-            'step_id' => $step2->id, 'option_id' => $s2_fail->id,
-            'action_type' => 'loop_back', 'target_step_id' => $step1->id,
-        ]);
-        StepTransition::create([
-            'step_id' => $step2->id, 'option_id' => $s2_partial->id,
-            'action_type' => 'loop_back', 'target_step_id' => $step1->id,
-        ]);
-
-        // Step 3: Yes → next, No → loop back
-        StepTransition::create([
-            'step_id' => $step3->id, 'option_id' => $s3_yes->id,
-            'action_type' => 'next_step',
-        ]);
-        StepTransition::create([
-            'step_id' => $step3->id, 'option_id' => $s3_no->id,
-            'action_type' => 'loop_back', 'target_step_id' => $step3->id,
-        ]);
-
-        // Step 4: Approved → end, Rejected → loop back to step 1
-        StepTransition::create([
-            'step_id' => $step4->id, 'option_id' => $s4_approve->id,
-            'action_type' => 'end',
-        ]);
-        StepTransition::create([
-            'step_id' => $step4->id, 'option_id' => $s4_reject->id,
-            'action_type' => 'loop_back', 'target_step_id' => $step1->id,
-        ]);
-
-        // Create second process: Bug Report Workflow
+        // Create process for Company 2: Bug Report Workflow
         $process2 = Process::create([
             'name_en' => 'Bug Report Workflow',
             'name_de' => 'Fehlermeldung Workflow',
             'description_en' => 'Standard workflow for handling bug reports with self-verification.',
             'description_de' => 'Standard-Workflow zur Bearbeitung von Fehlermeldungen mit Selbstverifikation.',
-            'created_by' => $teamLead->id,
+            'created_by' => $admin2->id,
+            'company_id' => $company2->id,
             'status' => 'active',
             'version' => 1,
             'category' => 'Development',

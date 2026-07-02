@@ -39,6 +39,24 @@ return [
     'already_registered' => 'Already registered?',
     'no_account' => "Don't have an account?",
 
+    // Company / Multi-tenant
+    'company' => 'Company',
+    'company_name' => 'Company Name',
+    'company_name_placeholder' => 'e.g. Acme Corp',
+    'company_info' => 'Company Information',
+    'company_settings' => 'Company Settings',
+    'company_settings_desc' => 'Manage your company profile and settings.',
+    'company_updated' => 'Company settings updated.',
+    'company_slug' => 'Company ID',
+    'register_company' => 'Register Your Company',
+    'register_company_desc' => 'Create your company account and start building decision processes.',
+    'register_company_btn' => 'Register Your Company',
+    'admin_account' => 'Admin Account',
+    'no_company' => 'Your account is not associated with a company.',
+    'description' => 'Description',
+    'website' => 'Website',
+    'plan' => 'Plan',
+
     // Roles
     'role' => 'Role',
     'role_admin' => 'Admin',

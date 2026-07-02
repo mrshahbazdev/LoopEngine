@@ -44,7 +44,7 @@
                         <a href="{{ route('dashboard') }}" class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 btn-press transition-colors">{{ __('app.dashboard') }}</a>
                     @else
                         <a href="{{ route('login') }}" class="text-sm font-semibold text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors">{{ __('app.login') }}</a>
-                        <a href="{{ route('register') }}" class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 btn-press transition-colors">{{ __('app.register') }}</a>
+                        <a href="{{ route('register') }}" class="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500 btn-press transition-colors">{{ __('app.register_company_btn') }}</a>
                     @endauth
                 </div>
             </div>
@@ -66,7 +66,7 @@
                 <h1 class="mt-10 text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-6xl">{{ __('app.hero_title') }}</h1>
                 <p class="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-400">{{ __('app.hero_subtitle') }}</p>
                 <div class="mt-10 flex items-center gap-x-6">
-                    <a href="{{ route('register') }}" class="rounded-md bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 btn-press transition-colors">{{ __('app.get_started') }}</a>
+                    <a href="{{ route('register') }}" class="rounded-md bg-indigo-600 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 btn-press transition-colors">{{ __('app.register_company_btn') }}</a>
                     <a href="#how-it-works" class="text-sm font-semibold leading-6 text-gray-900 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">{{ __('app.learn_more') }} <span aria-hidden="true">&rarr;</span></a>
                 </div>
             </div>

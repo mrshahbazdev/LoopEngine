@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportController;
 use App\Http\Controllers\LocaleController;
@@ -32,7 +33,7 @@ Route::middleware('guest')->group(function () {
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 
 // Authenticated routes
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'company'])->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -113,6 +114,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/export/audit/pdf', [ExportController::class, 'auditPdf'])->name('export.audit.pdf');
     Route::get('/export/run/{run}/csv', [ExportController::class, 'runSummaryCsv'])->name('export.run.csv');
     Route::get('/export/run/{run}/pdf', [ExportController::class, 'runSummaryPdf'])->name('export.run.pdf');
+
+    // Company settings
+    Route::middleware('role:admin')->prefix('company')->group(function () {
+        Route::get('/settings', [CompanyController::class, 'settings'])->name('company.settings');
+        Route::put('/settings', [CompanyController::class, 'update'])->name('company.update');
+    });
 
     // Admin
     Route::middleware('role:admin')->prefix('admin')->group(function () {

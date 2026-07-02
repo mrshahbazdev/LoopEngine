@@ -8,9 +8,10 @@ use Illuminate\Http\Request;
 
 class PermissionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $users = User::with('permissions')
+            ->where('company_id', $request->user()->company_id)
             ->where('role', '!=', 'admin')
             ->orderBy('name')
             ->paginate(20);
@@ -22,6 +23,10 @@ class PermissionController extends Controller
 
     public function update(Request $request, User $user)
     {
+        if ($user->company_id !== $request->user()->company_id) {
+            abort(403);
+        }
+
         $validated = $request->validate([
             'permissions' => ['nullable', 'array'],
             'permissions.*' => ['string', 'in:' . implode(',', array_keys(Permission::AVAILABLE))],

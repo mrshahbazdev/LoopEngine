@@ -39,6 +39,24 @@ return [
     'already_registered' => 'Bereits registriert?',
     'no_account' => 'Noch kein Konto?',
 
+    // Company / Multi-tenant
+    'company' => 'Unternehmen',
+    'company_name' => 'Firmenname',
+    'company_name_placeholder' => 'z.B. Acme GmbH',
+    'company_info' => 'Unternehmensinformationen',
+    'company_settings' => 'Unternehmenseinstellungen',
+    'company_settings_desc' => 'Verwalten Sie Ihr Unternehmensprofil und Ihre Einstellungen.',
+    'company_updated' => 'Unternehmenseinstellungen aktualisiert.',
+    'company_slug' => 'Unternehmens-ID',
+    'register_company' => 'Unternehmen registrieren',
+    'register_company_desc' => 'Erstellen Sie Ihr Unternehmenskonto und beginnen Sie mit der Erstellung von Entscheidungsprozessen.',
+    'register_company_btn' => 'Unternehmen registrieren',
+    'admin_account' => 'Admin-Konto',
+    'no_company' => 'Ihr Konto ist keinem Unternehmen zugeordnet.',
+    'description' => 'Beschreibung',
+    'website' => 'Webseite',
+    'plan' => 'Plan',
+
     // Roles
     'role' => 'Rolle',
     'role_admin' => 'Admin',

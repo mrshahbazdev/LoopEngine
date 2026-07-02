@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Company;
 use App\Models\Process;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -12,11 +13,13 @@ class TeamAssignmentTest extends TestCase
     use RefreshDatabase;
 
     protected User $admin;
+    protected Company $company;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->admin = User::factory()->create(['role' => 'admin']);
+        $this->company = Company::factory()->create();
+        $this->admin = User::factory()->create(['role' => 'admin', 'company_id' => $this->company->id]);
     }
 
     public function test_team_dashboard_accessible(): void
@@ -27,10 +30,11 @@ class TeamAssignmentTest extends TestCase
 
     public function test_assign_process_to_user(): void
     {
-        $employee = User::factory()->create(['role' => 'employee']);
+        $employee = User::factory()->create(['role' => 'employee', 'company_id' => $this->company->id]);
         $process = Process::create([
             'name_en' => 'Test',
             'created_by' => $this->admin->id,
+            'company_id' => $this->company->id,
             'status' => 'active',
             'version' => 1,
         ]);
@@ -52,10 +56,11 @@ class TeamAssignmentTest extends TestCase
 
     public function test_employee_cannot_assign(): void
     {
-        $employee = User::factory()->create(['role' => 'employee']);
+        $employee = User::factory()->create(['role' => 'employee', 'company_id' => $this->company->id]);
         $process = Process::create([
             'name_en' => 'Test',
             'created_by' => $this->admin->id,
+            'company_id' => $this->company->id,
             'status' => 'active',
             'version' => 1,
         ]);

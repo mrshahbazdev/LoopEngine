@@ -58,8 +58,7 @@ class TemplateController extends Controller
 
     public function share(Request $request)
     {
-        $processes = Process::where('created_by', $request->user()->id)
-            ->where('status', 'active')
+        $processes = Process::where('status', 'active')
             ->whereDoesntHave('template')
             ->get();
 
@@ -78,9 +77,7 @@ class TemplateController extends Controller
             'tags' => ['nullable', 'string'],
         ]);
 
-        $process = Process::where('id', $validated['process_id'])
-            ->where('created_by', $request->user()->id)
-            ->firstOrFail();
+        $process = Process::findOrFail($validated['process_id']);
 
         ProcessTemplate::create([
             'process_id' => $process->id,

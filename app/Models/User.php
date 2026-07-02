@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -21,6 +22,7 @@ class User extends Authenticatable
         'role',
         'locale',
         'team',
+        'company_id',
     ];
 
     protected $hidden = [
@@ -54,6 +56,11 @@ class User extends Authenticatable
     public function canManageProcesses(): bool
     {
         return in_array($this->role, ['admin', 'team_lead']);
+    }
+
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
     }
 
     public function createdProcesses(): HasMany

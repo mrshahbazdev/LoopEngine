@@ -14,6 +14,11 @@ Route::middleware('auth:sanctum')->group(function () {
                 'email' => $request->user()->email,
                 'role' => $request->user()->role,
                 'locale' => $request->user()->locale,
+                'company' => $request->user()->company ? [
+                    'id' => $request->user()->company->id,
+                    'name' => $request->user()->company->name,
+                    'slug' => $request->user()->company->slug,
+                ] : null,
             ],
         ]);
     });

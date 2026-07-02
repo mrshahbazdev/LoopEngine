@@ -11,14 +11,16 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
-    public function analytics()
+    public function analytics(Request $request)
     {
+        $companyId = $request->user()->company_id;
+
         $totalProcesses = Process::count();
         $activeProcesses = Process::where('status', 'active')->count();
-        $totalRuns = ProcessRun::count();
-        $completedRuns = ProcessRun::where('status', 'completed')->count();
+        $totalRuns = ProcessRun::whereHas('process', fn ($q) => $q->where('company_id', $companyId))->count();
+        $completedRuns = ProcessRun::whereHas('process', fn ($q) => $q->where('company_id', $companyId))->where('status', 'completed')->count();
         $completionRate = $totalRuns > 0 ? round(($completedRuns / $totalRuns) * 100, 1) : 0;
-        $avgLoops = ProcessRun::where('status', 'completed')->avg('loop_count') ?? 0;
+        $avgLoops = ProcessRun::whereHas('process', fn ($q) => $q->where('company_id', $companyId))->where('status', 'completed')->avg('loop_count') ?? 0;
 
         $processStats = Process::withCount([
             'runs',
@@ -29,12 +31,13 @@ class AdminController extends Controller
           ->where('status', 'active')
           ->get();
 
-        $teamPerformance = User::withCount([
-            'processRuns',
-            'processRuns as completed_runs_count' => function ($q) {
-                $q->where('status', 'completed');
-            },
-        ])->get()
+        $teamPerformance = User::where('company_id', $companyId)
+            ->withCount([
+                'processRuns',
+                'processRuns as completed_runs_count' => function ($q) {
+                    $q->where('status', 'completed');
+                },
+            ])->get()
           ->filter(fn ($u) => $u->process_runs_count > 0)
           ->values();
 
@@ -52,7 +55,11 @@ class AdminController extends Controller
 
     public function auditLog(Request $request)
     {
-        $query = RunLog::with(['run.process', 'user'])->latest();
+        $companyId = $request->user()->company_id;
+
+        $query = RunLog::with(['run.process', 'user'])
+            ->whereHas('run.process', fn ($q) => $q->where('company_id', $companyId))
+            ->latest();
 
         if ($request->filled('action')) {
             $query->where('action', $request->action);
@@ -63,14 +70,17 @@ class AdminController extends Controller
         }
 
         $logs = $query->paginate(25);
-        $users = User::orderBy('name')->get();
+        $users = User::where('company_id', $companyId)->orderBy('name')->get();
 
         return view('admin.audit', compact('logs', 'users'));
     }
 
-    public function users()
+    public function users(Request $request)
     {
-        $users = User::withCount('processRuns')->orderBy('name')->paginate(20);
+        $users = User::where('company_id', $request->user()->company_id)
+            ->withCount('processRuns')
+            ->orderBy('name')
+            ->paginate(20);
         return view('admin.users', compact('users'));
     }
 
@@ -86,6 +96,7 @@ class AdminController extends Controller
         User::create([
             ...$validated,
             'password' => Hash::make($validated['password']),
+            'company_id' => $request->user()->company_id,
         ]);
 
         return back()->with('success', __('app.user_saved'));
@@ -93,6 +104,10 @@ class AdminController extends Controller
 
     public function updateUser(Request $request, User $user)
     {
+        if ($user->company_id !== $request->user()->company_id) {
+            abort(403);
+        }
+
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', 'unique:users,email,' . $user->id],
@@ -108,9 +123,13 @@ class AdminController extends Controller
         return back()->with('success', __('app.user_saved'));
     }
 
-    public function destroyUser(User $user)
+    public function destroyUser(Request $request, User $user)
     {
-        if ($user->id === request()->user()->id) {
+        if ($user->company_id !== $request->user()->company_id) {
+            abort(403);
+        }
+
+        if ($user->id === $request->user()->id) {
             return back()->with('error', 'Cannot delete yourself.');
         }
 

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Company;
 use App\Models\Process;
 use App\Models\ProcessStep;
 use App\Models\StepOption;
@@ -15,11 +16,13 @@ class ProcessDuplicationTest extends TestCase
     use RefreshDatabase;
 
     protected User $admin;
+    protected Company $company;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->admin = User::factory()->create(['role' => 'admin']);
+        $this->company = Company::factory()->create();
+        $this->admin = User::factory()->create(['role' => 'admin', 'company_id' => $this->company->id]);
     }
 
     protected function createProcess(): Process
@@ -29,6 +32,7 @@ class ProcessDuplicationTest extends TestCase
             'name_de' => 'Originalprozess',
             'description_en' => 'A test process',
             'created_by' => $this->admin->id,
+            'company_id' => $this->company->id,
             'status' => 'active',
             'version' => 1,
             'category' => 'quality',
