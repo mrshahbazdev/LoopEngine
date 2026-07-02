@@ -1,5 +1,4 @@
-<x-app-layout>
-    <x-slot:title>{{ __('app.company_settings') }}</x-slot:title>
+<x-layouts.app :title="__('app.company_settings')">
     <x-slot:header>{{ __('app.company_settings') }}</x-slot:header>
 
     <div class="max-w-2xl">
@@ -61,4 +60,4 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+</x-layouts.app>
