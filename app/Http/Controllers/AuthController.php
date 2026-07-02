@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,18 +41,22 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validated = $request->validate([
+            'company_name' => ['required', 'string', 'max:255'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'confirmed', Password::defaults()],
         ]);
 
-        $isFirstUser = User::count() === 0;
+        $company = Company::create([
+            'name' => $validated['company_name'],
+        ]);
 
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'role' => $isFirstUser ? 'admin' : 'employee',
+            'role' => 'admin',
+            'company_id' => $company->id,
         ]);
 
         Auth::login($user);

@@ -13,6 +13,7 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
+        $companyId = $user->company_id;
 
         $activeProcesses = Process::where('status', 'active')->count();
 
@@ -41,7 +42,9 @@ class DashboardController extends Controller
             ->get();
 
         // Chart data: runs per day (last 30 days)
+        $companyProcessIds = Process::pluck('id');
         $runsPerDay = ProcessRun::where('started_at', '>=', now()->subDays(30))
+            ->whereIn('process_id', $companyProcessIds)
             ->when(!$user->isAdmin(), fn ($q) => $q->where('started_by', $user->id))
             ->selectRaw("DATE(started_at) as date, COUNT(*) as count, SUM(CASE WHEN status = 'completed' THEN 1 ELSE 0 END) as completed")
             ->groupBy('date')
@@ -66,6 +69,7 @@ class DashboardController extends Controller
 
         // Chart data: loop distribution
         $loopDistribution = ProcessRun::where('status', 'completed')
+            ->whereIn('process_id', $companyProcessIds)
             ->when(!$user->isAdmin(), fn ($q) => $q->where('started_by', $user->id))
             ->selectRaw("CASE WHEN loop_count = 0 THEN '0' WHEN loop_count BETWEEN 1 AND 2 THEN '1-2' WHEN loop_count BETWEEN 3 AND 5 THEN '3-5' ELSE '6+' END as range, COUNT(*) as count")
             ->groupBy('range')
@@ -74,7 +78,8 @@ class DashboardController extends Controller
             ->toArray();
 
         // Chart data: status breakdown
-        $statusBreakdown = ProcessRun::when(!$user->isAdmin(), fn ($q) => $q->where('started_by', $user->id))
+        $statusBreakdown = ProcessRun::whereIn('process_id', $companyProcessIds)
+            ->when(!$user->isAdmin(), fn ($q) => $q->where('started_by', $user->id))
             ->selectRaw("status, COUNT(*) as count")
             ->groupBy('status')
             ->pluck('count', 'status')

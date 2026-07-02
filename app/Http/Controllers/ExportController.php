@@ -11,7 +11,11 @@ class ExportController extends Controller
 {
     public function auditCsv(Request $request): Response
     {
-        $query = RunLog::with(['run.process', 'user'])->latest();
+        $companyId = $request->user()->company_id;
+
+        $query = RunLog::with(['run.process', 'user'])
+            ->whereHas('run.process', fn ($q) => $q->where('company_id', $companyId))
+            ->latest();
 
         if ($request->filled('action')) {
             $query->where('action', $request->action);
@@ -73,7 +77,11 @@ class ExportController extends Controller
 
     public function auditPdf(Request $request)
     {
-        $query = RunLog::with(['run.process', 'user'])->latest();
+        $companyId = $request->user()->company_id;
+
+        $query = RunLog::with(['run.process', 'user'])
+            ->whereHas('run.process', fn ($q) => $q->where('company_id', $companyId))
+            ->latest();
 
         if ($request->filled('action')) {
             $query->where('action', $request->action);

@@ -40,6 +40,7 @@ class AuthTest extends TestCase
     public function test_user_can_register(): void
     {
         $response = $this->post('/register', [
+            'company_name' => 'Test Company',
             'name' => 'Test User',
             'email' => 'test@example.com',
             'password' => 'password123',
@@ -48,6 +49,7 @@ class AuthTest extends TestCase
 
         $response->assertRedirect(route('dashboard'));
         $this->assertDatabaseHas('users', ['email' => 'test@example.com']);
+        $this->assertDatabaseHas('companies', ['name' => 'Test Company']);
     }
 
     public function test_dashboard_requires_auth(): void

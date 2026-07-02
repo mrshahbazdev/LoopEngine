@@ -2,18 +2,21 @@
 
 namespace App\Models;
 
+use App\Models\Traits\BelongsToCompany;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Process extends Model
 {
+    use BelongsToCompany;
     protected $fillable = [
         'name_en',
         'name_de',
         'description_en',
         'description_de',
         'created_by',
+        'company_id',
         'status',
         'version',
         'category',

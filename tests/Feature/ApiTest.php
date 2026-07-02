@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Company;
 use App\Models\Process;
 use App\Models\ProcessStep;
 use App\Models\StepOption;
@@ -15,22 +16,25 @@ class ApiTest extends TestCase
     use RefreshDatabase;
 
     protected User $user;
+    protected Company $company;
     protected string $token;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = User::factory()->create(['role' => 'employee']);
+        $this->company = Company::factory()->create();
+        $this->user = User::factory()->create(['role' => 'employee', 'company_id' => $this->company->id]);
         $this->token = $this->user->createToken('test')->plainTextToken;
     }
 
     protected function createActiveProcess(): Process
     {
-        $admin = User::factory()->create(['role' => 'admin']);
+        $admin = User::factory()->create(['role' => 'admin', 'company_id' => $this->company->id]);
 
         $process = Process::create([
             'name_en' => 'API Test Process',
             'created_by' => $admin->id,
+            'company_id' => $this->company->id,
             'status' => 'active',
             'version' => 1,
         ]);

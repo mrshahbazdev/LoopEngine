@@ -7,6 +7,11 @@
             <span class="text-xl font-bold text-white">{{ __('app.app_name') }}</span>
         </a>
     </div>
+    @if(auth()->check() && auth()->user()->company)
+    <div class="px-2 py-1">
+        <span class="text-xs font-medium text-indigo-300 truncate block">{{ auth()->user()->company->name }}</span>
+    </div>
+    @endif
 
     <nav class="flex flex-1 flex-col">
         <ul role="list" class="flex flex-1 flex-col gap-y-7">
@@ -86,6 +91,20 @@
             @endif
 
             @if(auth()->user()->isAdmin())
+            <li>
+                <div class="text-xs font-semibold uppercase tracking-wider text-indigo-400">{{ __('app.company') }}</div>
+                <ul role="list" class="-mx-2 mt-2 space-y-1">
+                    <li>
+                        <a href="{{ route('company.settings') }}"
+                           class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold {{ request()->routeIs('company.*') ? 'bg-indigo-800 text-white' : 'text-indigo-200 hover:bg-indigo-800 hover:text-white' }}">
+                            <svg class="h-6 w-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3H21m-3.75 3H21" />
+                            </svg>
+                            {{ __('app.company_settings') }}
+                        </a>
+                    </li>
+                </ul>
+            </li>
             <li>
                 <div class="text-xs font-semibold uppercase tracking-wider text-indigo-400">{{ __('app.admin') }}</div>
                 <ul role="list" class="-mx-2 mt-2 space-y-1">
