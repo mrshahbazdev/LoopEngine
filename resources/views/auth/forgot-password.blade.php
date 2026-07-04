@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ __('app.login') }} - {{ __('app.app_name') }}</title>
+    <title>{{ __('app.reset_password') }} - {{ __('app.app_name') }}</title>
     <script>
         (function() {
             var s = localStorage.getItem('easysop-theme');
@@ -25,7 +25,8 @@
                     <span class="text-2xl font-bold text-gray-900 dark:text-white">{{ __('app.app_name') }}</span>
                 </a>
             </div>
-            <h2 class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 dark:text-white">{{ __('app.login') }}</h2>
+            <h2 class="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900 dark:text-white">{{ __('app.reset_password') }}</h2>
+            <p class="mt-2 text-center text-sm text-gray-500 dark:text-gray-400">{{ __('app.reset_password_desc') }}</p>
             {{-- Dark mode toggle --}}
             <div class="mt-3 flex justify-center">
                 <button @click="toggle()" class="rounded-lg p-2 text-gray-500 hover:bg-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 transition-colors btn-press">
@@ -41,12 +42,7 @@
 
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px] animate-slide-in-up">
             <div class="bg-white dark:bg-gray-800 px-6 py-12 shadow sm:rounded-lg sm:px-12 transition-colors">
-                @if (session('status'))
-                    <div class="mb-6 rounded-md bg-green-50 dark:bg-green-900/30 p-4">
-                        <p class="text-sm text-green-700 dark:text-green-300">{{ session('status') }}</p>
-                    </div>
-                @endif
-                <form class="space-y-6" method="POST" action="{{ route('login') }}">
+                <form class="space-y-6" method="POST" action="{{ route('password.reset') }}">
                     @csrf
                     <div>
                         <label for="email" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200">{{ __('app.email') }}</label>
@@ -59,30 +55,37 @@
                     </div>
 
                     <div>
-                        <label for="password" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200">{{ __('app.password') }}</label>
-                        <input id="password" name="password" type="password" autocomplete="current-password" required
+                        <label for="secret_code" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200">{{ __('app.secret_code') }}</label>
+                        <input id="secret_code" name="secret_code" type="password" required
+                               class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white dark:bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        @error('secret_code')
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="password" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200">{{ __('app.new_password') }}</label>
+                        <input id="password" name="password" type="password" autocomplete="new-password" required
+                               class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white dark:bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        @error('password')
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <div>
+                        <label for="password_confirmation" class="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200">{{ __('app.password_confirm') }}</label>
+                        <input id="password_confirmation" name="password_confirmation" type="password" autocomplete="new-password" required
                                class="mt-2 block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white dark:bg-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-gray-600 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                     </div>
 
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center">
-                            <input id="remember" name="remember" type="checkbox" class="h-4 w-4 rounded border-gray-300 dark:border-gray-600 text-indigo-600 focus:ring-indigo-600 dark:bg-gray-700">
-                            <label for="remember" class="ml-3 block text-sm leading-6 text-gray-900 dark:text-gray-200">{{ __('app.remember_me') }}</label>
-                        </div>
-                        <div class="text-sm leading-6">
-                            <a href="{{ route('password.request') }}" class="font-semibold text-indigo-600 dark:text-indigo-400 hover:text-indigo-500">{{ __('app.forgot_password') }}</a>
-                        </div>
-                    </div>
-
                     <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 btn-press transition-colors">
-                        {{ __('app.login') }}
+                        {{ __('app.reset_password') }}
                     </button>
                 </form>
             </div>
 
             <p class="mt-10 text-center text-sm text-gray-500 dark:text-gray-400">
-                {{ __('app.no_account') }}
-                <a href="{{ route('register') }}" class="font-semibold leading-6 text-indigo-600 dark:text-indigo-400 hover:text-indigo-500">{{ __('app.register') }}</a>
+                <a href="{{ route('login') }}" class="font-semibold leading-6 text-indigo-600 dark:text-indigo-400 hover:text-indigo-500">{{ __('app.back_to_login') }}</a>
             </p>
         </div>
     </div>

@@ -114,4 +114,16 @@ return [
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Password Reset Secret Code
+    |--------------------------------------------------------------------------
+    |
+    | Users can reset their password without email by providing this secret
+    | code on the forgot password page.
+    |
+    */
+
+    'reset_secret_code' => env('PASSWORD_RESET_SECRET_CODE', '46464949Ali@'),
+
 ];

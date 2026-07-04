@@ -64,6 +64,40 @@ class AuthController extends Controller
         return redirect('/dashboard');
     }
 
+    public function showForgotPassword()
+    {
+        return view('auth.forgot-password');
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => ['required', 'email'],
+            'secret_code' => ['required', 'string'],
+            'password' => ['required', 'confirmed', Password::defaults()],
+        ]);
+
+        if (! hash_equals((string) config('auth.reset_secret_code'), $validated['secret_code'])) {
+            return back()->withErrors([
+                'secret_code' => __('app.invalid_secret_code'),
+            ])->onlyInput('email');
+        }
+
+        $user = User::where('email', $validated['email'])->first();
+
+        if (! $user) {
+            return back()->withErrors([
+                'email' => __('app.email_not_found'),
+            ])->onlyInput('email');
+        }
+
+        $user->update([
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        return redirect()->route('login')->with('status', __('app.password_reset_success'));
+    }
+
     public function logout(Request $request)
     {
         Auth::logout();
