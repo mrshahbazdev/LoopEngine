@@ -38,6 +38,14 @@ return [
     'forgot_password' => 'Forgot your password?',
     'already_registered' => 'Already registered?',
     'no_account' => "Don't have an account?",
+    'reset_password' => 'Reset Password',
+    'reset_password_desc' => 'Enter your email, the secret code, and your new password.',
+    'secret_code' => 'Secret Code',
+    'new_password' => 'New Password',
+    'invalid_secret_code' => 'The secret code is incorrect.',
+    'email_not_found' => 'No account found with this email address.',
+    'password_reset_success' => 'Your password has been reset. You can now log in.',
+    'back_to_login' => 'Back to login',
 
     // Company / Multi-tenant
     'company' => 'Company',

@@ -38,6 +38,14 @@ return [
     'forgot_password' => 'Passwort vergessen?',
     'already_registered' => 'Bereits registriert?',
     'no_account' => 'Noch kein Konto?',
+    'reset_password' => 'Passwort zurücksetzen',
+    'reset_password_desc' => 'Geben Sie Ihre E-Mail, den Geheimcode und Ihr neues Passwort ein.',
+    'secret_code' => 'Geheimcode',
+    'new_password' => 'Neues Passwort',
+    'invalid_secret_code' => 'Der Geheimcode ist falsch.',
+    'email_not_found' => 'Kein Konto mit dieser E-Mail-Adresse gefunden.',
+    'password_reset_success' => 'Ihr Passwort wurde zurückgesetzt. Sie können sich jetzt anmelden.',
+    'back_to_login' => 'Zurück zur Anmeldung',
 
     // Company / Multi-tenant
     'company' => 'Unternehmen',
